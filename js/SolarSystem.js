@@ -1,41 +1,44 @@
 import * as THREE from './libraries/three.module.js';
+import Planet from './Planet.js';
+import Sun from './Sun.js';
 
 
 
-class SolarSystem
+class SolarSystem extends THREE.Object3D
 {
-    constructor(width, height, scene)
+    constructor(width, height)
     {
+        super();
+
         this.width = width;
         this.height = height;
 
-        this.components = [];
-        this.initialize(scene);
+        this.planets = [];
+        this.initialize();
     }
 
-    initialize(scene)
+    initialize()
     {
-        // initialize a root node
-        this.root = new THREE.Object3D();
-        scene.add(this.root);
-        
-        // common sphere geometry for planets and sun
-        const geometry = new THREE.SphereGeometry(5, 5, 5);
+        // create sun
+        this.sun = new Sun(this.root);
+        this.add(this.sun);
 
-        // create a sun component
+        // create earth
         {
-            let material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
-            let mesh = new THREE.Mesh(geometry, material);
-            this.root.add(mesh);
+            let planet = new Planet(1, 0x4477FF);
+            planet.position.x = 10;
+            this.planets.push(planet);
+            this.add(planet);
         }
-
-        // create planets
+        
+        
     }
 
     update()
     {
-        this.root.rotation.y += 0.01;
         // animate planets and suns
+        this.rotation.y = (this.rotation.y + 0.01) % (Math.PI * 2);
+        this.planets.forEach(planet => planet.update());
     }
 
     resize(width, height)

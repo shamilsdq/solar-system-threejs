@@ -29,7 +29,8 @@ class App
         this.camera.lookAt(0, 0, 0);
 
         // initialize solar system object
-        this.solarsystem = new SolarSystem(this.width, this.height, this.scene);
+        this.solarsystem = new SolarSystem(this.width, this.height);
+        this.scene.add(this.solarsystem);
     }
 
     animate()
